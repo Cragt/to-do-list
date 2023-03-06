@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo List</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="header">
+      <h1>ToDo List</h1>
+    </div>
+    <div class="content">
+      <div>
+        <div id="cards"></div>
+      </div>
+      <button id="new-task">Add a Task</button>
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Create a task:</p>
+          <form action="" method="">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" />
+            <label for="description">Description</label>
+            <input type="text" id="description" />
+            <label for="due-date">Due Date</label>
+            <input type="date" id="due-date" />
+            <label for="priority">Priority</label>
+            <select name="priority" id="priority">
+                <option value="Low Priority">1 - Low</option>
+                <option value="Medium Priority">2 - Medium</option>
+                <option value="High Priority">3 - High</option>
+              </select>
+            <button id="modal-btn">Add Task</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
