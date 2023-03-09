@@ -1,23 +1,12 @@
 import "./style.css";
-const modal = document.getElementById("myModal");
-const btn = document.getElementById("new-task");
-const modalBtn = document.getElementById("modal-btn");
-const title = document.getElementById("title");
-const description = document.getElementById("description");
-const dueDate = document.getElementById("due-date");
-const priority = document.getElementById("priority");
-const span = document.getElementsByClassName("close");
-const cards = document.getElementById("cards");
-
+const tasks = document.getElementById("tasks");
 let myTaskList = [];
 
-// Task Constructor
-class Task {
-  constructor(title, description, due, priority) {
-    (this.title = title),
-      (this.description = description),
-      (this.due = due),
-      (this.priority = priority);
+// Project Constructor
+
+class Project {
+  constructor(id, projectName, task) {
+    (this.id = id), (this.projectName = projectName), (this.task = task);
   }
   addTask() {
     return addTaskToTaskList(this);
@@ -29,91 +18,47 @@ const addTaskToTaskList = function (task) {
   myTaskList.push(task);
 };
 
-// Placeholder Tasks
-const task1 = new Task(
-  "Take out trash",
-  "Bring trashcan to curb",
-  "12-30-2022",
-  "Medium Priority"
-);
-const task2 = new Task(
-  "Fold laundry",
-  "Take clothes out of the dryer and fold them/put them away",
-  "1-2-2023",
-  "Low Priority"
-);
-const task3 = new Task(
-  "Finish studying",
-  "Finish studying JavaScript",
-  "4-17-2045",
-  "High Priority"
-);
+const project1 = new Project("0", "Todo List", [
+  "Finish Javascript",
+  "Complete delete button function",
+  "2-1-1993",
+  "High Priority",
+]);
+project1.addTask();
 
-task1.addTask();
-task2.addTask();
-task3.addTask();
+const selectSidebar = document.getElementById("projects");
+const project1Button = document.createElement("button");
+project1Button.textContent = project1.projectName;
+selectSidebar.appendChild(project1Button);
+
+project1Button.addEventListener("click", function (event) {
+  event.preventDefault();
+  createCard(myTaskList);
+  console.log(myTaskList);
+});
+
+console.log(project1.task[2]);
 
 // Creates tasks for each card in the DOM
-let createCard = function () {
-  cards.innerHTML = "";
-  myTaskList.forEach((task, index) => {
-    let html = `<div class="card"><p>${task.title}</p><p>${task.description}</p><p>${task.due}</p><p>${task.priority}</p><button class="remove-btn" data-index="${index}">Delete</button></div>`;
-    cards.innerHTML += html;
+let createCard = function (project) {
+  tasks.innerHTML = "";
+  project.forEach((task, index) => {
+    let html = `<div class="cards"><div class="card"><p>${task.task[0]}</p><p>${task.task[1]}</p><p>${task.task[2]}</p><p>${task.task[3]}</p><button class="remove-btn" data-index="${index}">Delete</button></div></div>`;
+    tasks.innerHTML += html;
   });
 
   // Adds event listeners to delete buttons
-  const deleteButtons = document.querySelectorAll(".remove-btn");
-  deleteButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const index = button.dataset.index;
-      deleteCard(index);
-    });
-  });
-};
+  //   const deleteButtons = document.querySelectorAll(".remove-btn");
+  //   deleteButtons.forEach((button) => {
+  //     button.addEventListener("click", () => {
+  //       const index = button.dataset.index;
+  //       deleteCard(index);
+  //     });
+  //   });
+  // };
 
-function deleteCard(index) {
-  myTaskList.splice(index, 1);
-  createCard();
+  // function deleteCard(index) {
+  //   myTaskList.splice(index, 1);
+  //   createCard(myTaskList);
   console.log(myTaskList);
-}
-
-// Checks the array for already registered tasks
-function alreadyInTaskList(title) {
-  return myTaskList.some(function (el) {
-    return el.title === title;
-  });
-}
-
-// Functions for modal window
-btn.onclick = function () {
-  modal.style.display = "block";
 };
-
-span.onclick = function () {
-  modal.style.display = "none";
-};
-
-window.onclick = function (event) {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-};
-
-// Bring up modal window with Add a Task form
-modalBtn.addEventListener("click", function (event) {
-  event.preventDefault();
-  const task = new Task(
-    title.value,
-    description.value,
-    dueDate.value,
-    priority.value
-  );
-  modal.style.display = "none";
-  if (alreadyInTaskList(title.value)) {
-    return alert("Sorry, it looks like this task is already in your Task List");
-  }
-  task.addTask();
-  createCard();
-});
-
-createCard();

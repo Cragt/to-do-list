@@ -16,13 +16,15 @@ body {
   padding-bottom: 15px;
 }
 
-#cards {
+.cards {
+  /* border: black solid 2px; */
+  margin-left: 150px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-template-rows: repeat(2, 1fr);
 }
 
-#cards > div {
+.cards > div {
   font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -111,5 +113,22 @@ button:disabled {
   cursor: not-allowed;
 }
 
-button#newBook {
+#projects {
+  height: 100%;
+  width: 150px;
+  position: absolute;
+  float: left;
+  left: 0;
+  top: 0;
+  padding-top: 40px;
+  /* background-color: lightblue; */
+  border: black solid 4px;
+}
+
+#projects button {
+  margin-top: 5px;
+}
+
+.tasks {
+  margin-left: 150px;
 }
