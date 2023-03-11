@@ -113,7 +113,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-#projects {
+#sidebar {
   height: 100%;
   width: 150px;
   position: absolute;
@@ -125,10 +125,10 @@ button:disabled {
   border: black solid 4px;
 }
 
-#projects button {
+#sidebar button {
   margin-top: 5px;
 }
 
-.tasks {
-  margin-left: 150px;
+#tasks {
+  margin-left: 160px;
 }

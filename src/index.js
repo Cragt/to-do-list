@@ -1,64 +1,150 @@
 import "./style.css";
-const tasks = document.getElementById("tasks");
-let myTaskList = [];
+const sidebar = document.getElementById("sidebar");
+const content = document.getElementById("tasks");
+// Create empty project array
+let projects = [];
 
-// Project Constructor
-
+// Project constructor
 class Project {
-  constructor(id, projectName, task) {
-    (this.id = id), (this.projectName = projectName), (this.task = task);
-  }
-  addTask() {
-    return addTaskToTaskList(this);
+  constructor(name, tasks) {
+    this.name = name;
+    this.tasks = tasks;
   }
 }
 
-// Adds task to array
-const addTaskToTaskList = function (task) {
-  myTaskList.push(task);
-};
-
-const project1 = new Project("0", "Todo List", [
-  "Finish Javascript",
-  "Complete delete button function",
-  "2-1-1993",
-  "High Priority",
+// Testing the constructor / Array
+// console.log(projects)
+const project1 = new Project("todo list", [
+  "feed dog",
+  "eat food",
+  "finish project",
+  "relax",
 ]);
-project1.addTask();
+projects.push(project1);
 
-const selectSidebar = document.getElementById("projects");
-const project1Button = document.createElement("button");
-project1Button.textContent = project1.projectName;
-selectSidebar.appendChild(project1Button);
+// Adding 'add project' button to sidebar
 
-project1Button.addEventListener("click", function (event) {
-  event.preventDefault();
-  createCard(myTaskList);
-  console.log(myTaskList);
+const addProjectButton = document.createElement("button");
+addProjectButton.innerText = "Add a Project";
+sidebar.appendChild(addProjectButton);
+
+// When add project is clicked, runs the renderForm function
+addProjectButton.addEventListener("click", () => {
+  renderForm();
 });
 
-console.log(project1.task[2]);
+// Render the form in the DOM
+const renderForm = function () {
+  tasks.innerText = "";
 
-// Creates tasks for each card in the DOM
-let createCard = function (project) {
-  tasks.innerHTML = "";
-  project.forEach((task, index) => {
-    let html = `<div class="cards"><div class="card"><p>${task.task[0]}</p><p>${task.task[1]}</p><p>${task.task[2]}</p><p>${task.task[3]}</p><button class="remove-btn" data-index="${index}">Delete</button></div></div>`;
-    tasks.innerHTML += html;
+  // Create a form element
+  const form = document.createElement("form");
+
+  // Create input elements for project name, task name, task description, due date, and priority
+  const projectNameInput = document.createElement("input");
+  projectNameInput.type = "text";
+  projectNameInput.name = "project-name";
+  projectNameInput.placeholder = "Project Name";
+
+  const taskNameInput = document.createElement("input");
+  taskNameInput.type = "text";
+  taskNameInput.name = "task-name";
+  taskNameInput.placeholder = "Task Name";
+
+  const taskDescriptionInput = document.createElement("textarea");
+  taskDescriptionInput.name = "task-description";
+  taskDescriptionInput.placeholder = "Task Description";
+
+  const dueDateInput = document.createElement("input");
+  dueDateInput.type = "date";
+  dueDateInput.name = "due-date";
+
+  const priorityInput = document.createElement("select");
+  priorityInput.name = "priority";
+
+  // Create option elements for priority select
+  const highPriorityOption = document.createElement("option");
+  highPriorityOption.value = "high";
+  highPriorityOption.textContent = "High";
+
+  const mediumPriorityOption = document.createElement("option");
+  mediumPriorityOption.value = "medium";
+  mediumPriorityOption.textContent = "Medium";
+
+  const lowPriorityOption = document.createElement("option");
+  lowPriorityOption.value = "low";
+  lowPriorityOption.textContent = "Low";
+
+  // Append option elements to the priority select
+  priorityInput.appendChild(lowPriorityOption);
+  priorityInput.appendChild(mediumPriorityOption);
+  priorityInput.appendChild(highPriorityOption);
+
+  // Create a submit button for the form
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.textContent = "Add Project";
+
+  // Append input elements and submit button to the form
+  form.appendChild(projectNameInput);
+  form.appendChild(taskNameInput);
+  form.appendChild(taskDescriptionInput);
+  form.appendChild(dueDateInput);
+  form.appendChild(priorityInput);
+  form.appendChild(submitButton);
+
+  // Append the form element to the "tasks" element in the DOM
+  const tasksElement = document.getElementById("tasks");
+  tasksElement.appendChild(form);
+
+  // When submit is clicked, add input values to the projects array
+  submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    submitAddForm(
+      projectNameInput.value,
+      taskNameInput.value,
+      taskDescriptionInput.value,
+      dueDateInput.value,
+      priorityInput.value
+    );
   });
+};
 
-  // Adds event listeners to delete buttons
-  //   const deleteButtons = document.querySelectorAll(".remove-btn");
-  //   deleteButtons.forEach((button) => {
-  //     button.addEventListener("click", () => {
-  //       const index = button.dataset.index;
-  //       deleteCard(index);
-  //     });
-  //   });
-  // };
+const submitAddForm = function (
+  projectName,
+  taskName,
+  taskDescription,
+  dueDate,
+  priority
+) {
+  const projectExists = projects.some(
+    (project) => project.name === projectName
+  );
 
-  // function deleteCard(index) {
-  //   myTaskList.splice(index, 1);
-  //   createCard(myTaskList);
-  console.log(myTaskList);
+  if (projectExists) {
+    alert(`Project '${projectName}' already exists.`);
+    return;
+  }
+
+  const newProject = new Project(projectName, [
+    taskName,
+    taskDescription,
+    dueDate,
+    priority,
+  ]);
+
+  projects.push(newProject);
+
+  renderProjects();
+};
+
+// Loops through projects array and appends the project name to the sidebar as a button
+const renderProjects = function () {
+  sidebar.innerHTML = "";
+
+  projects.forEach((project) => {
+    const projectNameElement = document.createElement("button");
+    projectNameElement.textContent = project.name;
+    sidebar.appendChild(projectNameElement);
+  });
 };
