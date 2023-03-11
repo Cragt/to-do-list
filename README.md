@@ -20,7 +20,7 @@ f. Checklist
 
 4. Create 'Different Project' functionality - If I click on one project I'll have a todo list for that project, clicking a seperate project will show me a different todo list. Probably using a Project constructor to create a project object with the todo tasks inside of that object. Using a function to add the object (project) name to the DOM on the sidebar, and when clicked will render the object properties (task > title, description, due date, priority, etc) on the page.
 
-Wednesday edit: Project constructor like this? Will need to construct the project object inserting a project name(title) and array(taskList). When a project is constructed it adds a button to the sidebar that when clicked on, calls createCard(<projectName>.taskList) to render that projects tasks in the DOM.
+Wednesday edit: Project constructor like this? Will need to construct the project object inserting a project name(title) and array(taskList). When a project is constructed it adds a button to the sidebar that when clicked on, calls createCard(<projectName>.taskList) to render that projects tasks in the DOM. Thursday edit: using maybe foreach.project.task?
 class Project {
 constructor(title, taskList) {
 (this.title = title),
@@ -30,6 +30,7 @@ addTask() {
 return addTaskToTaskList(this);
 }
 }
+
 
 Currently the "createCard" function uses the "myTaskList" array to create the cards. Maybe I should pass in a certain array as an argument to createCard and use that argument as the array to create the cards. For example: Click on Project 1 and it calls (createCard(project1) which in turn runs project1.forEach((task, index) => {
 }
