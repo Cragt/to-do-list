@@ -13,29 +13,20 @@ class Project {
 }
 
 // Testing the constructor / Array
-// console.log(projects)
 const project1 = new Project("todo list", [
-  "feed dog",
-  "eat food",
-  "finish project",
-  "relax",
+  {
+    taskName: "feed Dog",
+    taskDescription: "get food out",
+    dueDate: "1-2-3",
+    priority: "high",
+  },
 ]);
 projects.push(project1);
-
-// Adding 'add project' button to sidebar
-
-const addProjectButton = document.createElement("button");
-addProjectButton.innerText = "Add a Project";
-sidebar.appendChild(addProjectButton);
-
-// When add project is clicked, runs the renderForm function
-addProjectButton.addEventListener("click", () => {
-  renderForm();
-});
+// project1.tasks.push([{taskName: "asdf", taskDescription: "asdf", dueDate: "asdfff", priority: "ffff"}]);
 
 // Render the form in the DOM
-const renderForm = function () {
-  tasks.innerText = "";
+const renderAddProjectForm = function () {
+  content.innerText = "";
 
   // Create a form element
   const form = document.createElement("form");
@@ -45,6 +36,132 @@ const renderForm = function () {
   projectNameInput.type = "text";
   projectNameInput.name = "project-name";
   projectNameInput.placeholder = "Project Name";
+
+  // Create a submit button for the form
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.textContent = "Add Project";
+
+  // Append input elements and submit button to the form
+  form.appendChild(projectNameInput);
+  form.appendChild(submitButton);
+
+  // Append the form element to the "tasks" element in the DOM
+  content.appendChild(form);
+
+  // When submit is clicked, add input values to the projects array
+  submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    submitAddProjectForm(projectNameInput.value);
+  });
+};
+
+const submitAddProjectForm = function (projectName) {
+  const projectExists = projects.some(
+    (project) => project.name === projectName
+  );
+
+  if (projectExists) {
+    alert(`Project '${projectName}' already exists.`);
+    return;
+  }
+
+  const newProject = new Project(projectName, []);
+
+  projects.push(newProject);
+
+  renderProjects();
+};
+
+console.log(project1.tasks);
+// Adding 'add project' button to sidebar
+const renderAddProjectButton = function () {
+  const addProjectButton = document.createElement("button");
+  addProjectButton.innerText = "Add a Project";
+  sidebar.appendChild(addProjectButton);
+
+  // When add project is clicked, runs the renderAddProjectForm function
+  addProjectButton.addEventListener("click", () => {
+    renderAddProjectForm();
+  });
+};
+// Loops through projects array and appends the project name to the sidebar as a button
+const renderProjects = function () {
+  sidebar.innerHTML = "";
+  renderAddProjectButton();
+  projects.forEach((project) => {
+    const projectNameElement = document.createElement("button");
+    projectNameElement.textContent = project.name;
+    sidebar.appendChild(projectNameElement);
+
+    projectNameElement.addEventListener("click", () => {
+      console.log(project);
+      renderTasks(project);
+      console.log(project);
+    });
+  });
+};
+
+const renderTasks = function (project) {
+  content.innerHTML = "";
+
+  // Creates a header element for displaying selected project name at the top of the tasks area
+  const header = document.createElement("h2");
+  header.textContent = project.name;
+  content.appendChild(header);
+
+  // Create an 'Add Task' button
+  const addTaskButton = document.createElement("button");
+  addTaskButton.textContent = "Add a Task";
+  content.appendChild(addTaskButton);
+
+  addTaskButton.addEventListener("click", () => {
+    renderAddTaskForm(project);
+  });
+
+  // Loops through the tasks array of the selected project
+  project.tasks.forEach((task) => {
+    console.log(task.taskName);
+    // Creates div for each tasks card
+    const taskDiv = document.createElement("div");
+
+    // Creates elements for each part of the task card (name, description, due date, priority)
+    const taskHeader = document.createElement("h3");
+    taskHeader.textContent = task.taskName;
+    taskDiv.appendChild(taskHeader);
+
+    const taskDescription = document.createElement("p");
+    taskDescription.textContent = task.taskDescription;
+    taskDiv.appendChild(taskDescription);
+
+    const dueDate = document.createElement("p");
+    dueDate.textContent = task.dueDate;
+    taskDiv.appendChild(dueDate);
+
+    const priority = document.createElement("p");
+    priority.textContent = task.priority;
+    taskDiv.appendChild(priority);
+
+    // Creates a button to remove tasks from the project
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Delete Task";
+    taskDiv.appendChild(removeButton);
+
+    removeButton.addEventListener("click", () => {
+      const taskIndex = project.tasks.indexOf(task);
+      project.tasks.splice(taskIndex, 1);
+      renderTasks(project);
+    });
+    content.appendChild(taskDiv);
+  });
+};
+
+const renderAddTaskForm = function (project) {
+  content.innerHTML = "";
+
+  console.log(project);
+
+  const form = document.createElement("form");
 
   const taskNameInput = document.createElement("input");
   taskNameInput.type = "text";
@@ -83,25 +200,19 @@ const renderForm = function () {
   // Create a submit button for the form
   const submitButton = document.createElement("button");
   submitButton.type = "submit";
-  submitButton.textContent = "Add Project";
+  submitButton.textContent = "Add Task";
 
-  // Append input elements and submit button to the form
-  form.appendChild(projectNameInput);
   form.appendChild(taskNameInput);
   form.appendChild(taskDescriptionInput);
   form.appendChild(dueDateInput);
   form.appendChild(priorityInput);
   form.appendChild(submitButton);
+  content.appendChild(form);
 
-  // Append the form element to the "tasks" element in the DOM
-  const tasksElement = document.getElementById("tasks");
-  tasksElement.appendChild(form);
-
-  // When submit is clicked, add input values to the projects array
   submitButton.addEventListener("click", (event) => {
     event.preventDefault();
-    submitAddForm(
-      projectNameInput.value,
+    submitAddTaskForm(
+      project,
       taskNameInput.value,
       taskDescriptionInput.value,
       dueDateInput.value,
@@ -110,41 +221,18 @@ const renderForm = function () {
   });
 };
 
-const submitAddForm = function (
+const submitAddTaskForm = function (
   projectName,
   taskName,
   taskDescription,
   dueDate,
   priority
 ) {
-  const projectExists = projects.some(
-    (project) => project.name === projectName
-  );
-
-  if (projectExists) {
-    alert(`Project '${projectName}' already exists.`);
-    return;
-  }
-
-  const newProject = new Project(projectName, [
-    taskName,
-    taskDescription,
-    dueDate,
-    priority,
-  ]);
-
-  projects.push(newProject);
-
-  renderProjects();
+  console.log(projectName.tasks);
+  projectName.tasks.push({ taskName, taskDescription, dueDate, priority });
+  console.log(projectName.tasks);
+  console.log(projectName);
+  renderTasks(projectName);
 };
 
-// Loops through projects array and appends the project name to the sidebar as a button
-const renderProjects = function () {
-  sidebar.innerHTML = "";
-
-  projects.forEach((project) => {
-    const projectNameElement = document.createElement("button");
-    projectNameElement.textContent = project.name;
-    sidebar.appendChild(projectNameElement);
-  });
-};
+renderProjects();
