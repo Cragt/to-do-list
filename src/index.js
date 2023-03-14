@@ -13,7 +13,7 @@ class Project {
 }
 
 // Testing the constructor / Array
-const project1 = new Project("todo list", [
+const example = new Project("Example Project", [
   {
     taskName: "feed Dog",
     taskDescription: "get food out",
@@ -21,8 +21,7 @@ const project1 = new Project("todo list", [
     priority: "high",
   },
 ]);
-projects.push(project1);
-// project1.tasks.push([{taskName: "asdf", taskDescription: "asdf", dueDate: "asdfff", priority: "ffff"}]);
+projects.push(example);
 
 // Render the form in the DOM
 const renderAddProjectForm = function () {
@@ -73,7 +72,6 @@ const submitAddProjectForm = function (projectName) {
   renderProjects();
 };
 
-console.log(project1.tasks);
 // Adding 'add project' button to sidebar
 const renderAddProjectButton = function () {
   const addProjectButton = document.createElement("button");
@@ -95,9 +93,7 @@ const renderProjects = function () {
     sidebar.appendChild(projectNameElement);
 
     projectNameElement.addEventListener("click", () => {
-      console.log(project);
       renderTasks(project);
-      console.log(project);
     });
   });
 };
@@ -121,7 +117,6 @@ const renderTasks = function (project) {
 
   // Loops through the tasks array of the selected project
   project.tasks.forEach((task) => {
-    console.log(task.taskName);
     // Creates div for each tasks card
     const taskDiv = document.createElement("div");
 
@@ -158,8 +153,6 @@ const renderTasks = function (project) {
 
 const renderAddTaskForm = function (project) {
   content.innerHTML = "";
-
-  console.log(project);
 
   const form = document.createElement("form");
 
@@ -228,10 +221,7 @@ const submitAddTaskForm = function (
   dueDate,
   priority
 ) {
-  console.log(projectName.tasks);
   projectName.tasks.push({ taskName, taskDescription, dueDate, priority });
-  console.log(projectName.tasks);
-  console.log(projectName);
   renderTasks(projectName);
 };
 
