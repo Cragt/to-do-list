@@ -56,13 +56,20 @@ const renderPage = (function () {
       const children = sidebar.querySelectorAll(
         "button:not(:first-child):not(:last-child)"
       );
-      console.log(children);
-      children.forEach((button) => {
+      children.forEach((button, index) => {
         button.style.backgroundColor = "red";
 
         content.innerHTML = "Select a project to delete";
+        // Add a click event listener to each project button
+        button.addEventListener("click", () => {
+          // Remove the corresponding project from the projects array
+          projects.splice(index, 1);
+          // Re-render the project buttons
+          renderProjects();
+        });
       });
     });
+    content.innerHTML = "";
   };
 
   // Loops through projects array and appends the project name to the sidebar as a button
@@ -99,6 +106,7 @@ const renderPage = (function () {
     });
 
     // Loops through the tasks array of the selected project
+
     project.tasks.forEach((task) => {
       // Creates div for each tasks card
       const taskDiv = document.createElement("div");
