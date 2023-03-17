@@ -41,8 +41,9 @@ const renderPage = (function () {
     addProjectButton.innerText = "Add a Project";
     sidebar.appendChild(addProjectButton);
 
-    // When add project is clicked, runs the renderAddProjectForm function
+    // When add project is clicked, runs the renderProjects to remove Delete button state, then renders the form
     addProjectButton.addEventListener("click", () => {
+      renderProjects();
       renderAddProjectForm();
     });
   };
@@ -60,10 +61,18 @@ const renderPage = (function () {
         button.style.backgroundColor = "red";
 
         content.innerHTML = "Select a project to delete";
+        removeProjectButton.innerText = "Cancel";
+
+        removeProjectButton.addEventListener("click", () => {
+          renderProjects();
+        });
+
         // Add a click event listener to each project button
         button.addEventListener("click", () => {
           // Remove the corresponding project from the projects array
           projects.splice(index, 1);
+          localStorage.setItem("projects", JSON.stringify(projects));
+
           // Re-render the project buttons
           renderProjects();
         });
@@ -75,6 +84,7 @@ const renderPage = (function () {
   // Loops through projects array and appends the project name to the sidebar as a button
   const renderProjects = function () {
     sidebar.innerHTML = "";
+
     renderAddProjectButton();
     projects.forEach((project) => {
       const projectNameElement = document.createElement("button");

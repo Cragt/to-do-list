@@ -15,6 +15,7 @@ const submitModule = (function () {
     const newProject = new Project(projectName, []);
 
     projects.push(newProject);
+    localStorage.setItem("projects", JSON.stringify(projects));
 
     renderPage.renderProjects();
   };
@@ -27,6 +28,7 @@ const submitModule = (function () {
     priority
   ) {
     projectName.tasks.push({ taskName, taskDescription, dueDate, priority });
+    localStorage.setItem("projects", JSON.stringify(projects));
     renderPage.renderTasks(projectName);
   };
 
